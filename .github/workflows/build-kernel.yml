@@ -304,6 +304,9 @@ jobs:
         # Disable compat vDSO to avoid needing 32-bit cross compiler
         sed -i 's/CONFIG_COMPAT_VDSO=y/# CONFIG_COMPAT_VDSO is not set/' arch/arm64/configs/${{ env.KERNEL_CONFIG }}
         echo "# CONFIG_COMPAT_VDSO is not set" >> arch/arm64/configs/${{ env.KERNEL_CONFIG }}
+        # Patch arch Makefile to not error on missing CROSS_COMPILE_COMPAT
+        sed -i 's/$(error CROSS_COMPILE_COMPAT not defined/$(warning CROSS_COMPILE_COMPAT not defined/' arch/arm64/Makefile
+        sed -i 's/$(error $(CROSS_COMPILE_COMPAT)/$(warning $(CROSS_COMPILE_COMPAT)/' arch/arm64/Makefile
 
     - name: Build kernel
       run: |
