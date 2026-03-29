@@ -292,6 +292,16 @@ jobs:
         # Fix drvgen.mk to handle empty DTB overlay list
         sed -i "s|rm -f \$@.tmp|rm -f \$@.tmp\n\ttouch \$@.tmp|" scripts/drvgen/drvgen.mk
 
+    - name: Patch kernel for clang compatibility
+      run: |
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        sed -i 's/ifdef CONFIG_CC_STACKPROTECTOR_REGULAR/ifdef DISABLED_SP_REGULAR/' Makefile
+        sed -i 's/ifdef CONFIG_CC_STACKPROTECTOR_STRONG/ifdef DISABLED_SP_STRONG/' Makefile
+        sed -i '/^ifdef CONFIG_CC_STACKPROTECTOR$/s/.*/ifdef DISABLED_SP/' Makefile
+        sed -i 's/ifdef stackp-name/ifdef DISABLED_STACKP_NAME/' Makefile
+        sed -i 's/ifdef stackp-check/ifdef DISABLED_STACKP_CHECK/' Makefile
+        echo "Stack protector checks disabled for clang 21 compat"
+
     - name: Build kernel
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
