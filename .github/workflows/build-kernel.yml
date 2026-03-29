@@ -286,6 +286,12 @@ jobs:
         key: build-kernel-${{ env.DEVICE }}${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}
         max-size: 2G
 
+    - name: Fix MTK drvgen for CI
+      run: |
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        # Fix drvgen.mk to handle empty DTB overlay list
+        sed -i "s|rm -f \$@.tmp|rm -f \$@.tmp\n\ttouch \$@.tmp|" scripts/drvgen/drvgen.mk
+
     - name: Build kernel
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
