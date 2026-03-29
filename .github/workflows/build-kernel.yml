@@ -306,8 +306,8 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH
-        make -j$(nproc --all)           CC=clang           O=out           ARCH=arm64                                                                                                              CROSS_COMPILE=aarch64-linux-android-           CROSS_COMPILE_ARM32=arm-linux-androideabi-           ${{ env.KERNEL_CONFIG }}
-        make -j$(nproc --all)           CC=clang           O=out           ARCH=arm64                                                                                                              CROSS_COMPILE=aarch64-linux-android-           CROSS_COMPILE_ARM32=arm-linux-androideabi-
+        make -j$(nproc --all)           CC=clang           O=out           ARCH=arm64                                                                                                              CROSS_COMPILE=aarch64-linux-android- CLANG_TRIPLE=aarch64-linux-gnu-           CROSS_COMPILE_ARM32=arm-linux-androideabi-           ${{ env.KERNEL_CONFIG }}
+        make -j$(nproc --all)           CC=clang           O=out           ARCH=arm64                                                                                                              CROSS_COMPILE=aarch64-linux-android- CLANG_TRIPLE=aarch64-linux-gnu-           CROSS_COMPILE_ARM32=arm-linux-androideabi-
 
     - name: Check a kernel output files
       run: |
