@@ -301,6 +301,13 @@ jobs:
         sed -i 's/ifdef stackp-name/ifdef DISABLED_STACKP_NAME/' Makefile
         sed -i 's/ifdef stackp-check/ifdef DISABLED_STACKP_CHECK/' Makefile
         echo "Stack protector checks disabled for clang 21 compat"
+        # Fix missing LCM panel Makefile
+        find drivers/misc/mediatek/lcm -maxdepth 1 -type d | while read d; do
+          if [ ! -f "$d/Makefile" ] && [ "$d" != "drivers/misc/mediatek/lcm" ]; then
+            echo "obj-y +=" > "$d/Makefile"
+            echo "Created missing Makefile: $d"
+          fi
+        done
         # Disable compat vDSO to avoid needing 32-bit cross compiler
         sed -i 's/CONFIG_COMPAT_VDSO=y/# CONFIG_COMPAT_VDSO is not set/' arch/arm64/configs/${{ env.KERNEL_CONFIG }}
         echo "# CONFIG_COMPAT_VDSO is not set" >> arch/arm64/configs/${{ env.KERNEL_CONFIG }}
